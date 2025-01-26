@@ -112,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
             )
           ],
         ),
-        toolbarHeight: 90,
+        toolbarHeight: mqData!.size.height * 0.1,
         actions: [
           /// search button
           searchShow
@@ -153,233 +153,455 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Colors.black12,
 
       body: Center(
-        child: Column(
-          children: [
-            /// search box
-            searchShow
-                ? Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                      controller: locationController,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.blue.shade200,
-                        border: const OutlineInputBorder(
-                            borderSide: BorderSide.none),
-                        hintText: "Search location",
-                        hintStyle: myTextStyle18(fontColor: Colors.black45),
-                        suffixIcon: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Container(
-                              decoration: const BoxDecoration(
-                                  color: Colors.orange,
-                                  borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(16),
-                                      topLeft: Radius.circular(8),
-                                      bottomLeft: Radius.circular(16),
-                                      bottomRight: Radius.circular(8))),
-                              child: IconButton(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              /// search box
+              searchShow
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        controller: locationController,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.blue.shade200,
+                          border: const OutlineInputBorder(
+                              borderSide: BorderSide.none),
+                          hintText: "Search location",
+                          hintStyle: myTextStyle18(fontColor: Colors.black45),
+                          suffixIcon: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Container(
+                                decoration: const BoxDecoration(
+                                    color: Colors.orange,
+                                    borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(16),
+                                        topLeft: Radius.circular(8),
+                                        bottomLeft: Radius.circular(16),
+                                        bottomRight: Radius.circular(8))),
+                                child: IconButton(
 
-                                  /// in this search icon button search operation perform
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.search_outlined,
-                                    color: Colors.white,
-                                    size: 28,
-                                  ))),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(color: Colors.blueAccent),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none,
+                                    /// in this search icon button search operation perform
+                                    onPressed: () {},
+                                    icon: const Icon(
+                                      Icons.search_outlined,
+                                      color: Colors.white,
+                                      size: 28,
+                                    ))),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide:
+                                const BorderSide(color: Colors.blueAccent),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide.none,
+                          ),
                         ),
                       ),
-                    ),
-                  )
-                : const SizedBox(),
-            _currentWeather == null
-                ? const Center(child: CircularProgressIndicator())
-                : FutureBuilder<weatherData>(
-                    future: _currentWeather,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Center(
-                          child: Text("Error: ${snapshot.error}"),
-                        );
-                      } else if (snapshot.hasData) {
-                        final weatherData = snapshot.data;
-                        return Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Container(
-                                width: mqData!.size.width,
-                                decoration: BoxDecoration(
-                                    gradient: LinearGradient(colors: [
-                                      Colors.blue,
-                                      Colors.orange.shade200
-                                    ], begin: Alignment.topCenter),
-                                    borderRadius: BorderRadius.circular(16),
-                                    boxShadow: const [
-                                      BoxShadow(
-                                          color: Colors.blueAccent,
-                                          blurRadius: 4,
-                                          spreadRadius: 1)
-                                    ]),
-                                child: Column(
-                                  children: [
-                                    Image.asset(
-                                      "lib/assets/icons/cloud weather.png",
-                                      height: mqData!.size.height * 0.4,
-                                      fit: BoxFit.cover,
-                                    ),
-
-                                    Text(
-                                      "${weatherData!.current!.tempC}°",
-                                      style: myTextStyle72(),
-                                    ),
-                                    Text(
-                                      "${weatherData!.current!.condition!.text}",
-                                      style: myTextStyle28(),
-                                    ),
-
-                                    /// updated date show
-                                    Text(
-                                      DateFormat("dd MMM yyyy, hh:mm a").format(
-                                          DateTime.parse(weatherData
-                                              .current!.lastUpdated
-                                              .toString())),
-                                      style: myTextStyle18(),
-                                    ),
-                                    const Divider(),
-
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8.0, horizontal: 8),
-                                      child: Row(
-                                        children: [
-                                          /// feel like
-                                          Expanded(
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                  color: Colors.white38,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          16)),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(4.0),
-                                                child: Column(
-                                                  children: [
-                                                    Image.asset(
-                                                      "lib/assets/images/temprature.png",
-                                                      height: 40,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                    Text(
-                                                      "${weatherData!.current!.feelslikeC}°C",
-                                                      style: myTextStyle25(),
-                                                    ),
-                                                    Text(
-                                                      "Feel Like",
-                                                      style: myTextStyle18(),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                         const SizedBox(
-                                            width: 6,
-                                          ),
-
-                                          /// Humidity
-                                          Expanded(
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                  color: Colors.white38,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          16)),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(4.0),
-                                                child: Column(
-                                                  children: [
-                                                    Image.asset(
-                                                      "lib/assets/images/humidity.png",
-                                                      height: 40,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                    Text(
-                                                      "${weatherData!.current!.humidity}%",
-                                                      style: myTextStyle25(),
-                                                    ),
-                                                    Text(
-                                                      "Humidity",
-                                                      style: myTextStyle18(),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            width: 6,
-                                          ),
-                                          Expanded(
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                  color: Colors.white38,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          16)),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(4.0),
-                                                child: Column(
-                                                  children: [
-                                                    Image.asset(
-                                                      "lib/assets/images/wind.png",
-                                                      height: 40,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                    Text(
-                                                      "${weatherData!.current!.windKph} kph",
-                                                      style: myTextStyle25(),
-                                                    ),
-                                                    Text(
-                                                      "Wind",
-                                                      style: myTextStyle18(),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          )
-                                        ],
+                    )
+                  : const SizedBox(),
+              _currentWeather == null
+                  ? const Center(child: CircularProgressIndicator())
+                  : FutureBuilder<weatherData>(
+                      future: _currentWeather,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (snapshot.hasError) {
+                          return Center(
+                            child: Text("Error: ${snapshot.error}"),
+                          );
+                        } else if (snapshot.hasData) {
+                          final weatherData = snapshot.data;
+                          return Column(
+                            children: [
+                              /// main card
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Container(
+                                  width: mqData!.size.width,
+                                  decoration: BoxDecoration(
+                                      gradient: LinearGradient(colors: [
+                                        Colors.blue,
+                                        Colors.orange.shade200
+                                      ], begin: Alignment.topCenter),
+                                      borderRadius: BorderRadius.circular(16),
+                                      boxShadow: const [
+                                        BoxShadow(
+                                            color: Colors.blueAccent,
+                                            blurRadius: 4,
+                                            spreadRadius: 1)
+                                      ]),
+                                  child: Column(
+                                    children: [
+                                      Image.asset(
+                                        "lib/assets/icons/cloud weather.png",
+                                        height: mqData!.size.height * 0.4,
+                                        fit: BoxFit.cover,
                                       ),
-                                    )
-                                  ],
+
+                                      Text(
+                                        "${weatherData!.current!.tempC}°",
+                                        style: myTextStyle72(),
+                                      ),
+                                      Text(
+                                        "${weatherData.current!.condition!.text}",
+                                        style: myTextStyle28(),
+                                      ),
+
+                                      /// updated date show
+                                      Text(
+                                        DateFormat("dd MMM yyyy, hh:mm a")
+                                            .format(DateTime.parse(weatherData
+                                                .current!.lastUpdated
+                                                .toString())),
+                                        style: myTextStyle18(),
+                                      ),
+                                      const Divider(),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8.0, horizontal: 8),
+                                        child: Row(
+                                          children: [
+                                            /// feel like
+                                            Expanded(
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white38,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            16)),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(4.0),
+                                                  child: Column(
+                                                    children: [
+                                                      Image.asset(
+                                                        "lib/assets/images/temprature.png",
+                                                        height: 40,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                      Text(
+                                                        "${weatherData.current!.feelslikeC}°C",
+                                                        style: myTextStyle25(),
+                                                      ),
+                                                      Text(
+                                                        "Feel Like",
+                                                        style: myTextStyle18(),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 6,
+                                            ),
+
+                                            /// Humidity
+                                            Expanded(
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white38,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            16)),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(4.0),
+                                                  child: Column(
+                                                    children: [
+                                                      Image.asset(
+                                                        "lib/assets/images/humidity.png",
+                                                        height: 40,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                      Text(
+                                                        "${weatherData.current!.humidity}%",
+                                                        style: myTextStyle25(),
+                                                      ),
+                                                      Text(
+                                                        "Humidity",
+                                                        style: myTextStyle18(),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 6,
+                                            ),
+
+                                            /// Wind
+                                            Expanded(
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white38,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            16)),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(4.0),
+                                                  child: Column(
+                                                    children: [
+                                                      Image.asset(
+                                                        "lib/assets/images/wind.png",
+                                                        height: 40,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                      Text(
+                                                        "${weatherData.current!.windKph} kph",
+                                                        style: myTextStyle25(),
+                                                      ),
+                                                      Text(
+                                                        "Wind",
+                                                        style: myTextStyle18(),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            )
-                          ],
-                        );
-                      } else {
-                        return const Center(child: Text("No data available"));
-                      }
-                    },
-                  ),
-          ],
+                              const SizedBox(
+                                height: 16,
+                              ),
+
+                              /// other details show
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: SizedBox(
+                                  height: mqData!.size.height * 0.2,
+                                  child: Row(
+                                    children: [
+                                      /// Pressure
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                width: 2, color: Colors.white),
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                                    bottomRight:
+                                                        Radius.circular(22),
+                                                    topLeft:
+                                                        Radius.circular(22))),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0, vertical: 4),
+                                          child: Column(
+                                            children: [
+                                              Image.asset(
+                                                "lib/assets/images/air.png",
+                                                height: 80,
+                                              ),
+                                              Text(
+                                                "${weatherData.current!.pressureMb}Mb",
+                                                style: myTextStyle22(
+                                                    fontColor: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.w900),
+                                              ),
+                                              Text(
+                                                "Pressure",
+                                                style: myTextStyle18(
+                                                    fontColor: Colors.white70),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 12,
+                                      ),
+
+                                      /// Visibility
+                                      Expanded(
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                              gradient: LinearGradient(
+                                                colors: [
+                                                  Colors.greenAccent,
+                                                  Colors.blueAccent
+                                                ],
+                                              ),
+                                              borderRadius: BorderRadius.only(
+                                                  bottomRight:
+                                                      Radius.circular(22),
+                                                  topLeft:
+                                                      Radius.circular(22))),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0, vertical: 4),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      "${weatherData.current!.visKm} Km",
+                                                      style: myTextStyle28(
+                                                          fontColor:
+                                                              Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.w900),
+                                                    ),
+                                                    Text(
+                                                      "Visibility",
+                                                      style: myTextStyle22(
+                                                          fontColor:
+                                                              Colors.black87),
+                                                    )
+                                                  ],
+                                                ),
+                                                Image.asset(
+                                                  "lib/assets/images/eye.png",
+                                                  height: 90,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+
+                              /// other details part 2
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: SizedBox(
+                                  height: mqData!.size.height * 0.2,
+                                  child: Row(
+                                    children: [
+
+
+                                      /// Cloud Cover
+                                      Expanded(
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                              gradient: LinearGradient(
+                                                colors: [
+                                                  Colors.greenAccent,
+                                                  Colors.blueAccent
+                                                ],
+                                              ),
+                                              borderRadius: BorderRadius.only(
+                                                  bottomRight:
+                                                  Radius.circular(22),
+                                                  topLeft:
+                                                  Radius.circular(22))),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0, vertical: 4),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment
+                                                  .spaceBetween,
+                                              children: [
+                                                Column(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      "${weatherData.current!.cloud} %",
+                                                      style: myTextStyle28(
+                                                          fontColor:
+                                                          Colors.black,
+                                                          fontWeight:
+                                                          FontWeight.w900),
+                                                    ),
+                                                    Text(
+                                                      "Cloud Cover",
+                                                      style: myTextStyle22(
+                                                          fontColor:
+                                                          Colors.black87),
+                                                    )
+                                                  ],
+                                                ),
+                                                Image.asset(
+                                                  "lib/assets/icons/cloud.png",
+                                                  height: 90,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 12,
+                                      ),
+                                      /// Heat index
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                width: 2, color: Colors.white),
+                                            borderRadius:
+                                            const BorderRadius.only(
+                                                bottomRight:
+                                                Radius.circular(22),
+                                                topLeft:
+                                                Radius.circular(22))),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0, vertical: 4),
+                                          child: Column(
+                                            children: [
+                                              Image.asset(
+                                                "lib/assets/icons/temperature.png",
+                                                height: 80,
+                                              ),
+                                              Text(
+                                                "${weatherData.current!.heatindexC}° C",
+                                                style: myTextStyle22(
+                                                    fontColor: Colors.white,
+                                                    fontWeight:
+                                                    FontWeight.w900),
+                                              ),
+                                              Text(
+                                                "Heat index",
+                                                style: myTextStyle18(
+                                                    fontColor: Colors.white70),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+
+                                      /// other details part 3
+
+
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        } else {
+                          return const Center(child: Text("No data available"));
+                        }
+                      },
+                    ),
+            ],
+          ),
         ),
       ),
     );

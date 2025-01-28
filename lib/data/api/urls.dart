@@ -19,8 +19,13 @@ class Urls {
   }
 
   /// get forecast for a location
-  static String getForecast(String location, int days) {
-    return "$BASE_URL/forecast.json?key=$API_KEY&q=$location&days=$days";
+  static String getForecast(String location) {
+    return "$BASE_URL/forecast.json?key=$API_KEY&q=$location&days=15";
+  }
+
+  /// Get forecast by latitude and longitude
+  static String getForecastByLatLong(String latitude, String longitude) {
+    return "$BASE_URL/forecast.json?key=$API_KEY&q=$latitude,$longitude&days=15";
   }
 
   /// Search or autocomplete for a location
@@ -48,7 +53,6 @@ class Urls {
     return "$BASE_URL/astronomy.json?key=$API_KEY&q=$location&dt=$date";
   }
 }
-
 
 /// you can also try other weather
 ///

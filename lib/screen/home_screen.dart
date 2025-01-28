@@ -1,3 +1,4 @@
+import 'package:action_slider/action_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -5,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:weather_app/constant/utils.dart';
 import 'package:weather_app/data/api/api_helper.dart';
+import 'package:weather_app/screen/day_forecast_screen.dart';
 import 'package:weather_app/widgets/my_icon_button.dart';
 import '../model/weather_data_model.dart';
 
@@ -65,7 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
       currentLocation = location;
 
       setState(() {
-        _currentWeather = ApiHelper.fetchWeatherData(location: currentLocation);
+        _currentWeather =
+            ApiHelper.fetchWeatherForecast(location: currentLocation);
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -263,7 +266,48 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 .toString())),
                                         style: myTextStyle18(),
                                       ),
-                                      const Divider(),
+                                      const SizedBox(
+                                        height: 6,
+                                      ),
+
+                                      /// ______________________Action Slider___________________________///
+                                      ///
+                                      ActionSlider.standard(
+                                        width: mqData!.size!.width * 0.9,
+                                        height: mqData!.size.height * 0.06,
+                                        rolling: true,
+                                        icon: const Icon(
+                                          Icons.navigate_next_rounded,
+                                          size: 40,
+                                          color: Colors.white70,
+                                        ),
+                                        toggleColor: Colors.blue.shade800,
+                                        backgroundColor: Colors.white,
+                                        successIcon:
+                                            const Icon(Icons.verified_user),
+                                        child: Text(
+                                          'Slide to Next Day\'s',
+                                          style: myTextStyle15(),
+                                        ),
+                                        action: (controller) async {
+                                          controller.loading();
+                                          await Future.delayed(
+                                              const Duration(seconds: 1));
+                                          controller.success();
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                       DayForecastScreen(location: currentLocation,)));
+                                          setState(() {
+
+                                          });
+                                        },
+                                      ),
+                                      const SizedBox(
+                                        height: 6,
+                                      ),
+
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 8.0, horizontal: 8),
@@ -378,7 +422,160 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                               const SizedBox(
-                                height: 16,
+                                height: 8,
+                              ),
+
+                              /// _________________SUN_________________///
+                              /// here we show sunset and sunrise status
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.white12,
+                                      borderRadius: BorderRadius.circular(8)),
+                                  width: mqData!.size.width,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0, horizontal: 4),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Image.asset(
+                                              "lib/assets/icons/sun.png",
+                                              height: 50,
+                                            ),
+                                            const SizedBox(
+                                              width: 4,
+                                            ),
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  "Sunrise",
+                                                  style: myTextStyle15(
+                                                      fontColor:
+                                                          Colors.white70),
+                                                ),
+                                                Text(
+                                                  "${weatherData.forecast!.forecastday![0].astro!.sunrise}",
+                                                  style: myTextStyle18(
+                                                      fontColor: Colors.white),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Image.asset(
+                                              "lib/assets/images/sunset-.png",
+                                              height: 50,
+                                            ),
+                                            const SizedBox(
+                                              width: 4,
+                                            ),
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  "Sunset",
+                                                  style: myTextStyle15(
+                                                      fontColor:
+                                                          Colors.white70),
+                                                ),
+                                                Text(
+                                                  "${weatherData.forecast!.forecastday![0].astro!.sunset}",
+                                                  style: myTextStyle18(
+                                                      fontColor: Colors.white),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+
+                              ///_________________MOON_________________///
+                              ///here we show moonSet and moonRise
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.white12,
+                                      borderRadius: BorderRadius.circular(8)),
+                                  width: mqData!.size.width,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0, horizontal: 4),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Image.asset(
+                                              "lib/assets/images/moonrise.png",
+                                              height: 50,
+                                            ),
+                                            const SizedBox(
+                                              width: 4,
+                                            ),
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  "Moonrise",
+                                                  style: myTextStyle15(
+                                                      fontColor:
+                                                          Colors.white70),
+                                                ),
+                                                Text(
+                                                  "${weatherData.forecast!.forecastday![0].astro!.moonrise}",
+                                                  style: myTextStyle18(
+                                                      fontColor: Colors.white),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Image.asset(
+                                              "lib/assets/images/moonset.png",
+                                              height: 50,
+                                            ),
+                                            const SizedBox(
+                                              width: 4,
+                                            ),
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  "Moonset",
+                                                  style: myTextStyle15(
+                                                      fontColor:
+                                                          Colors.white70),
+                                                ),
+                                                Text(
+                                                  "${weatherData.forecast!.forecastday![0].astro!.moonset}",
+                                                  style: myTextStyle18(
+                                                      fontColor: Colors.white),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ),
 
                               /// other details show
@@ -492,8 +689,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   height: mqData!.size.height * 0.2,
                                   child: Row(
                                     children: [
-
-
                                       /// Cloud Cover
                                       Expanded(
                                         child: Container(
@@ -506,34 +701,34 @@ class _HomeScreenState extends State<HomeScreen> {
                                               ),
                                               borderRadius: BorderRadius.only(
                                                   bottomRight:
-                                                  Radius.circular(22),
+                                                      Radius.circular(22),
                                                   topLeft:
-                                                  Radius.circular(22))),
+                                                      Radius.circular(22))),
                                           child: Padding(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 8.0, vertical: 4),
                                             child: Row(
                                               mainAxisAlignment:
-                                              MainAxisAlignment
-                                                  .spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Column(
                                                   mainAxisAlignment:
-                                                  MainAxisAlignment.center,
+                                                      MainAxisAlignment.center,
                                                   children: [
                                                     Text(
                                                       "${weatherData.current!.cloud} %",
                                                       style: myTextStyle28(
                                                           fontColor:
-                                                          Colors.black,
+                                                              Colors.black,
                                                           fontWeight:
-                                                          FontWeight.w900),
+                                                              FontWeight.w900),
                                                     ),
                                                     Text(
                                                       "Cloud Cover",
                                                       style: myTextStyle22(
                                                           fontColor:
-                                                          Colors.black87),
+                                                              Colors.black87),
                                                     )
                                                   ],
                                                 ),
@@ -549,17 +744,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                       const SizedBox(
                                         width: 12,
                                       ),
+
                                       /// Heat index
                                       Container(
                                         decoration: BoxDecoration(
                                             border: Border.all(
                                                 width: 2, color: Colors.white),
                                             borderRadius:
-                                            const BorderRadius.only(
-                                                bottomRight:
-                                                Radius.circular(22),
-                                                topLeft:
-                                                Radius.circular(22))),
+                                                const BorderRadius.only(
+                                                    bottomRight:
+                                                        Radius.circular(22),
+                                                    topLeft:
+                                                        Radius.circular(22))),
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 8.0, vertical: 4),
@@ -574,7 +770,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 style: myTextStyle22(
                                                     fontColor: Colors.white,
                                                     fontWeight:
-                                                    FontWeight.w900),
+                                                        FontWeight.w900),
                                               ),
                                               Text(
                                                 "Heat index",
@@ -587,12 +783,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
 
                                       /// other details part 3
-
-
                                     ],
                                   ),
                                 ),
                               ),
+
+                              /// here we show forecast data
                             ],
                           );
                         } else {
@@ -619,4 +815,13 @@ class _HomeScreenState extends State<HomeScreen> {
 /// app bar create => DONE
 /// create icon button
 /// Step 4
-/// data show
+/// data show => DONE
+///
+/// FLOW THE STEPS FOR SHOW FORECAST DATA
+/// FIRE GET JSON FILE
+/// THEN CONVERT JSON TO MODEL THEN CREATE FUNCTION IN API API HELPER CALL
+///
+/// Step 5
+/// show next day information
+/// create screen all date temperature
+/// show date wise data

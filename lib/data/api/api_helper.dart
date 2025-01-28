@@ -24,20 +24,28 @@ class ApiHelper {
     }
   }
 
-  /// Fetch current weather data
-  static Future<weatherData> fetchWeatherData(
-      {String? location, String? latitude, String? longitude}) async {
-    String url;
+  /// Fetch weather forecast data
+  static Future<weatherData> fetchWeatherForecast({
+    String? location,
+    String? latitude,
+    String? longitude,
+  }) async {
+       String url;
     if (latitude != null && longitude != null) {
-      url = Urls.getWeatherByLatLong(latitude, longitude);
+      url = Urls.getForecastByLatLong(latitude, longitude);
     } else if (location != null) {
-      url = Urls.getWeatherUrl(location);
+      url = Urls.getForecast(location);
     } else {
-      throw Exception("Either location or latitude.longitude must be provide");
+      throw Exception("Either location or latitude.longitude must be provided");
     }
+
     final response = await getAPI(url);
     return weatherData.fromJson(response);
   }
 
+
   /// here we create for others
 }
+
+/// now we update api method
+/// update forecast method

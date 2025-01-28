@@ -32,6 +32,37 @@ class _DayForecastScreenState extends State<DayForecastScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        /// location show
+        title: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(
+                16,
+              ),
+              border: Border.all(width: 2, color: Colors.white38)),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                /// map icon
+                Image.asset(
+                  "lib/assets/images/map.png",
+                  height: 20,
+                ),
+                const SizedBox(
+                  width: 6,
+                ),
+
+                /// location
+                Text(
+                  widget.location,
+                  style: myTextStyle12(),
+                ),
+              ],
+            ),
+          ),
+        ),
+        centerTitle: true,
         flexibleSpace: Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -79,7 +110,8 @@ class _DayForecastScreenState extends State<DayForecastScreen> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 12.0, vertical: 8.0),
+                        horizontal: 12.0,
+                      ),
                       child: Text(
                         "15 Day's Forecast",
                         style: myTextStyle22(),
@@ -448,3 +480,4 @@ class _DayForecastScreenState extends State<DayForecastScreen> {
 ///
 /// Day Forecast screen Complete
 /// check Complete code
+/// location add => DONE

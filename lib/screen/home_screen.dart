@@ -18,9 +18,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
-  /// reset the slider button
-
   TextEditingController locationController = TextEditingController();
 
   Future<weatherData>? _currentWeather;
@@ -33,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _checkPermission();
     _getCurrentLocation();
+    setState(() {});
   }
 
   /// Check location permission and fetch location
@@ -77,6 +75,24 @@ class _HomeScreenState extends State<HomeScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Failed to get location: $e")),
       );
+    }
+  }
+
+  /// here we create function for searching
+  void _search() {
+    String userSearch = locationController.text.trim();
+    if (userSearch.isNotEmpty) {
+      setState(() {
+        currentLocation = userSearch;
+        _currentWeather =
+            ApiHelper.fetchWeatherForecast(location: currentLocation);
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+        "Enter Valid address",
+        style: myTextStyle18(),
+      )));
     }
   }
 
@@ -189,7 +205,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: IconButton(
 
                                     /// in this search icon button search operation perform
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      _search();
+                                    },
                                     icon: const Icon(
                                       Icons.search_outlined,
                                       color: Colors.white,
@@ -301,11 +319,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                       DayForecastScreen(location: currentLocation,)));
+                                                      DayForecastScreen(
+                                                        location:
+                                                            currentLocation,
+                                                      )));
                                           setState(() {
                                             /// only this line add
-                                            controller.reset(); /// add
+                                            controller.reset();
 
+                                            /// add
                                           });
                                         },
                                       ),
@@ -807,7 +829,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
 }
 
 /// Steps
@@ -827,7 +848,11 @@ class _HomeScreenState extends State<HomeScreen> {
 /// FIRE GET JSON FILE
 /// THEN CONVERT JSON TO MODEL THEN CREATE FUNCTION IN API API HELPER CALL
 ///
-/// Step 5
+/// Step 5 => DONE
 /// show next day information
 /// create screen all date temperature
 /// show date wise data
+///
+/// Step 6
+/// Search functionality perform => DONE
+///

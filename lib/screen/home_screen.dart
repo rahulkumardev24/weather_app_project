@@ -18,6 +18,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  /// reset the slider button
+
   TextEditingController locationController = TextEditingController();
 
   Future<weatherData>? _currentWeather;
@@ -300,6 +303,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   builder: (context) =>
                                                        DayForecastScreen(location: currentLocation,)));
                                           setState(() {
+                                            /// only this line add
+                                            controller.reset(); /// add
 
                                           });
                                         },
@@ -802,6 +807,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
 }
 
 /// Steps

@@ -10,7 +10,11 @@ import 'package:weather_app/model/weather_data_model.dart';
 class DayForecastScreen extends StatefulWidget {
   final String location;
 
-  const DayForecastScreen({super.key, required this.location});
+
+
+  const DayForecastScreen({super.key, required this.location ,
+
+  });
 
   @override
   State<DayForecastScreen> createState() => _DayForecastScreenState();
@@ -432,12 +436,29 @@ class _DayForecastScreenState extends State<DayForecastScreen> {
                                       controller.success();
 
                                       /// After Navigation Show Forecast Details Screen
+                                      /// here we send data to details screen
 
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  const ForecastDetailsScreen()));
+                                                  ForecastDetailsScreen(
+                                                    location: widget.location,
+                                                    date:formattedDate,
+                                                    avgTemp: day.day!.avgtempC,
+                                                    humidity: day.day!.avghumidity ,
+                                                    maxTemp: day.day!.maxtempC,
+                                                    minTemp: day.day!.mintempC,
+                                                    maxWind: day.day!.maxwindKph,
+                                                    visual: day.day!.avgvisKm,
+                                                    moonRiseTime: day.astro!.moonrise,
+                                                    moonSetTime: day.astro!.moonset,
+                                                    sunSetTime: day.astro!.sunset,
+                                                    sunRiseTime: day.astro!.sunrise,
+
+
+
+                                                  )));
 
                                       setState(() {
                                         /// only this line add

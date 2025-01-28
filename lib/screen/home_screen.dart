@@ -871,3 +871,6 @@ class _HomeScreenState extends State<HomeScreen> {
 ///
 /// Step 7
 /// Solve some basic problem => DONE
+///
+/// Step 8
+/// Forecast Details Screen

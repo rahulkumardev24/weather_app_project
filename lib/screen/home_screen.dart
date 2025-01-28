@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   /// here we create function for searching
-  void _search() {
+  void _search() async {
     String userSearch = locationController.text.trim();
     if (userSearch.isNotEmpty) {
       setState(() {
@@ -87,12 +87,23 @@ class _HomeScreenState extends State<HomeScreen> {
         _currentWeather =
             ApiHelper.fetchWeatherForecast(location: currentLocation);
       });
+      try {
+        await _currentWeather;
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(
+              "Enter valid address",
+              style: myTextStyle18(fontColor: Colors.white),
+            )));
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.red,
           content: Text(
-        "Enter Valid address",
-        style: myTextStyle18(),
-      )));
+            "Plz enter address",
+            style: myTextStyle18(fontColor: Colors.white),
+          )));
     }
   }
 
@@ -151,6 +162,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           onTap: () {
                             setState(() {
                               searchShow = false;
+                              locationController.clear();
+                              _getCurrentLocation();
                             });
                           })),
                 )
@@ -856,3 +869,5 @@ class _HomeScreenState extends State<HomeScreen> {
 /// Step 6
 /// Search functionality perform => DONE
 ///
+/// Step 7
+/// Solve some basic problem => DONE

@@ -44,7 +44,7 @@ class ForecastDetailsScreen extends StatefulWidget {
       required this.moonSetTime,
       required this.sunRiseTime,
       required this.sunSetTime,
-      required this.index,
+       required this.index,
       required this.rainChance,
       required this.snowChance,
       required this.totalSnow,
@@ -95,7 +95,11 @@ class _ForecatDetailsScreenState extends State<ForecastDetailsScreen> {
               buttonIcon: Icons.backspace_outlined,
               buttonColor: Colors.orange.shade200,
               onTap: () {
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> DayForecastScreen(location: widget.location)));
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            DayForecastScreen(location: widget.location)));
               }),
         ),
         actions: [
@@ -310,6 +314,7 @@ class _ForecatDetailsScreenState extends State<ForecastDetailsScreen> {
               ),
 
               /// here we show Hourly Data
+              /// ______________________________HOURLY____________________________///
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),

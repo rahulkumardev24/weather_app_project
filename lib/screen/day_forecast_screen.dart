@@ -456,6 +456,12 @@ class _DayForecastScreenState extends State<DayForecastScreen> {
                                                     sunSetTime: day.astro!.sunset,
                                                     sunRiseTime: day.astro!.sunrise,
                                                     index: index,
+                                                    rainChance: day.day!.dailyChanceOfRain,
+                                                    snowChance: day.day!.dailyChanceOfSnow ,
+                                                    totalSnow:day.day!.totalsnowCm ,
+                                                    uvIndex:day.day!.uv ,
+                                                    avgVis: day.day!.avgvisKm,
+
                                                   )));
 
                                       setState(() {

@@ -23,6 +23,11 @@ class ForecastDetailsScreen extends StatefulWidget {
   dynamic moonRiseTime;
   dynamic moonSetTime;
   dynamic index;
+  dynamic rainChance;
+  dynamic snowChance;
+  dynamic totalSnow;
+  dynamic uvIndex;
+  dynamic avgVis;
 
   ForecastDetailsScreen(
       {super.key,
@@ -38,7 +43,12 @@ class ForecastDetailsScreen extends StatefulWidget {
       required this.moonSetTime,
       required this.sunRiseTime,
       required this.sunSetTime,
-      required this.index});
+      required this.index,
+      required this.rainChance,
+      required this.snowChance,
+      required this.totalSnow,
+      required this.uvIndex,
+      required this.avgVis});
 
   @override
   State<ForecastDetailsScreen> createState() => _ForecatDetailsScreenState();
@@ -102,12 +112,12 @@ class _ForecatDetailsScreenState extends State<ForecastDetailsScreen> {
                 colors: [Colors.blue.shade100, Colors.orange.shade100],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SingleChildScrollView(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: Container(
                   width: mqData!.size.width,
                   decoration: BoxDecoration(
@@ -213,289 +223,350 @@ class _ForecatDetailsScreenState extends State<ForecastDetailsScreen> {
                   ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 12,
-            ),
-
-            /// astro details show
-            /// here we call astro card
-            /// Sun
-            MyAstroCard(
-              firstImage: "lib/assets/icons/sun.png",
-              secondImage: "lib/assets/images/sunset-.png",
-              startTitle: "Sunrise",
-              endTitle: "Sunset",
-              endTime: widget.sunSetTime,
-              startTime: widget.sunRiseTime,
-            ),
-            const SizedBox(
-              height: 12,
-            ),
-
-            /// moon
-            MyAstroCard(
-              startTitle: "Moonrise",
-              endTitle: "Moonset",
-              endTime: widget.moonSetTime,
-              startTime: widget.moonRiseTime,
-            ),
-            const SizedBox(
-              height: 12,
-            ),
-
-            /// here we show Hourly Data
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              child: Text(
-                "Hourly Forecast",
-                style: myTextStyle22(),
+              const SizedBox(
+                height: 12,
               ),
-            ),
-            const SizedBox(
-              height: 12,
-            ),
 
-            FutureBuilder<weatherData>(
-              future: _forecastWeather,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasData) {
-                  /// here we pass the index
-                  final List<Hour> hourlyForecast = snapshot
-                          .data?.forecast?.forecastday?[widget.index].hour ??
-                      [];
-                  return SizedBox(
-                    height: mqData!.size.height * 0.31,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: hourlyForecast.length,
-                      itemBuilder: (context, index) {
-                        final hourData = hourlyForecast[index];
-                        DateTime time = DateTime.parse(hourData.time!);
-                        String formattedTime =
-                            DateFormat("hh:mm a").format(time);
-                        return SizedBox(
-                          width: mqData!.size.width * 0.5,
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Card(
-                              color: Colors.blue.shade100,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width: mqData!.size.width,
-                                    height: mqData!.size.height * 0.05,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            width: 2,
-                                            color: Colors.blue.shade800),
-                                        color: Colors.white,
-                                        borderRadius: const BorderRadius.only(
-                                            topRight: Radius.circular(10),
-                                            topLeft: Radius.circular(10))),
-                                    child: Center(
-                                        child: Text(
-                                      formattedTime,
-                                      style: myTextStyle18(),
-                                    )),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 4.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+              /// astro details show
+              /// here we call astro card
+              /// Sun
+              MyAstroCard(
+                firstImage: "lib/assets/icons/sun.png",
+                secondImage: "lib/assets/images/sunset-.png",
+                startTitle: "Sunrise",
+                endTitle: "Sunset",
+                endTime: widget.sunSetTime,
+                startTime: widget.sunRiseTime,
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+
+              /// moon
+              MyAstroCard(
+                startTitle: "Moonrise",
+                endTitle: "Moonset",
+                endTime: widget.moonSetTime,
+                startTime: widget.moonRiseTime,
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+
+              /// here we show some other data
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    /// rain
+                    MyDetailsCard(
+                      imagePath: "lib/assets/icons/rainy-day.png",
+                      title: "Rain",
+                      value: "${widget.rainChance}%",
+                      cardColor: Colors.blue.shade100,
+                      borderColor: Colors.blue.shade100,
+                    ),
+
+                    /// snow
+                    MyDetailsCard(
+                      imagePath: "lib/assets/icons/snow.png",
+                      title: "Snow",
+                      value: "${widget.snowChance}%",
+                      cardColor: Colors.blue.shade200,
+                      borderColor: Colors.blue.shade200,
+                    ),
+
+                    /// snow
+                    MyDetailsCard(
+                      imagePath: "lib/assets/icons/snow.png",
+                      title: "Snow",
+                      value:
+                          "${widget.totalSnow.toString().split(".").take(1).join()}Cm",
+                      cardColor: Colors.blue.shade300,
+                      borderColor: Colors.blue.shade300,
+                    ),
+
+                    /// Uv index
+                    MyDetailsCard(
+                      imagePath: "lib/assets/icons/uv.png",
+                      title: "Uv Index",
+                      value: "${widget.uvIndex}",
+                      cardColor: Colors.blue.shade400,
+                      borderColor: Colors.blue.shade400,
+                    ),
+
+                    /// Avg wind
+                    MyDetailsCard(
+                      imagePath: "lib/assets/images/eye.png",
+                      title: "Avg Wind",
+                      value: "${widget.avgVis}",
+                      cardColor: Colors.blue.shade500,
+                      borderColor: Colors.blue.shade500,
+                    ),
+                  ],
+                ),
+              ),
+
+              /// here we show Hourly Data
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
+                child: Text(
+                  "Hourly Forecast",
+                  style: myTextStyle22(),
+                ),
+              ),
+              FutureBuilder<weatherData>(
+                future: _forecastWeather,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasData) {
+                    /// here we pass the index
+                    final List<Hour> hourlyForecast = snapshot
+                            .data?.forecast?.forecastday?[widget.index].hour ??
+                        [];
+                    return SizedBox(
+                      height: mqData!.size.height * 0.31,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: hourlyForecast.length,
+                        itemBuilder: (context, index) {
+                          final hourData = hourlyForecast[index];
+                          DateTime time = DateTime.parse(hourData.time!);
+                          String formattedTime =
+                              DateFormat("hh:mm a").format(time);
+                          return SizedBox(
+                            width: mqData!.size.width * 0.5,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
+                              child: Card(
+                                color: Colors.blue.shade100,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: mqData!.size.width,
+                                      height: mqData!.size.height * 0.05,
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              width: 2,
+                                              color: Colors.blue.shade800),
+                                          color: Colors.white,
+                                          borderRadius: const BorderRadius.only(
+                                              topRight: Radius.circular(10),
+                                              topLeft: Radius.circular(10))),
+                                      child: Center(
+                                          child: Text(
+                                        formattedTime,
+                                        style: myTextStyle18(),
+                                      )),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 4.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "${hourData.tempC}°",
+                                                style: myTextStyle25(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              Text(
+                                                "Feels like ${hourData.feelslikeC}° ",
+                                                style: myTextStyle15(),
+                                              ),
+                                              Text(
+                                                "${hourData.condition!.text}",
+                                                style: myTextStyle18(),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        Column(
                                           children: [
-                                            Text(
-                                              "${hourData.tempC}°",
-                                              style: myTextStyle25(
-                                                  fontWeight: FontWeight.bold),
+                                            Image.network(
+                                              "https:${hourData.condition!.icon}",
+                                              fit: BoxFit.cover,
                                             ),
-                                            Text(
-                                              "Feels like ${hourData.feelslikeC}° ",
-                                              style: myTextStyle15(),
-                                            ),
-                                            Text(
-                                              "${hourData.condition!.text}",
-                                              style: myTextStyle18(),
-                                            )
                                           ],
                                         ),
-                                      ),
-                                      Column(
-                                        children: [
-                                          Image.network(
-                                            "https:${hourData.condition!.icon}",
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      /// humidity
-                                      Column(
-                                        children: [
-                                          Container(
-                                              decoration: BoxDecoration(
-                                                  color: Colors.white38,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(4.0),
-                                                child: Image.asset(
-                                                  "lib/assets/images/humidity.png",
-                                                  height: mqData!.size.height *
-                                                      0.04,
-                                                ),
-                                              )),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 4.0),
-                                            child: Text(
-                                              "${hourData.humidity!}%",
-                                              style: myTextStyle15(),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        /// humidity
+                                        Column(
+                                          children: [
+                                            Container(
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white38,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(4.0),
+                                                  child: Image.asset(
+                                                    "lib/assets/images/humidity.png",
+                                                    height:
+                                                        mqData!.size.height *
+                                                            0.04,
+                                                  ),
+                                                )),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 4.0),
+                                              child: Text(
+                                                "${hourData.humidity!}%",
+                                                style: myTextStyle15(),
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
+                                          ],
+                                        ),
 
-                                      /// pressure
-                                      Column(
-                                        children: [
-                                          Container(
-                                              decoration: BoxDecoration(
-                                                  color: Colors.white38,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(4.0),
-                                                child: Image.asset(
-                                                  "lib/assets/images/air.png",
-                                                  height: mqData!.size.height *
-                                                      0.04,
-                                                ),
-                                              )),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 4.0),
-                                            child: Text(
-                                              "${hourData.pressureIn!.toString().split(".").take(1).join()} In",
-                                              style: myTextStyle15(),
+                                        /// pressure
+                                        Column(
+                                          children: [
+                                            Container(
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white38,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(4.0),
+                                                  child: Image.asset(
+                                                    "lib/assets/images/air.png",
+                                                    height:
+                                                        mqData!.size.height *
+                                                            0.04,
+                                                  ),
+                                                )),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 4.0),
+                                              child: Text(
+                                                "${hourData.pressureIn!.toString().split(".").take(1).join()} In",
+                                                style: myTextStyle15(),
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
+                                          ],
+                                        ),
 
-                                      /// chance of rain
-                                      Column(
-                                        children: [
-                                          Container(
-                                              decoration: BoxDecoration(
-                                                  color: Colors.white38,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(4.0),
-                                                child: Image.asset(
-                                                  "lib/assets/icons/rainy-day.png",
-                                                  height: mqData!.size.height *
-                                                      0.04,
-                                                ),
-                                              )),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 4.0),
-                                            child: Text(
-                                              "${hourData.chanceOfRain!}%",
-                                              style: myTextStyle15(),
+                                        /// chance of rain
+                                        Column(
+                                          children: [
+                                            Container(
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white38,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(4.0),
+                                                  child: Image.asset(
+                                                    "lib/assets/icons/rainy-day.png",
+                                                    height:
+                                                        mqData!.size.height *
+                                                            0.04,
+                                                  ),
+                                                )),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 4.0),
+                                              child: Text(
+                                                "${hourData.chanceOfRain!}%",
+                                                style: myTextStyle15(),
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
+                                          ],
+                                        ),
 
-                                      /// chance of snow
-                                      Column(
-                                        children: [
-                                          Container(
-                                              decoration: BoxDecoration(
-                                                  color: Colors.white38,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(4.0),
-                                                child: Image.asset(
-                                                  "lib/assets/icons/snow.png",
-                                                  height: mqData!.size.height *
-                                                      0.04,
-                                                ),
-                                              )),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 4.0),
-                                            child: Text(
-                                              "${hourData.chanceOfSnow!}%",
-                                              style: myTextStyle15(),
+                                        /// chance of snow
+                                        Column(
+                                          children: [
+                                            Container(
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white38,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(4.0),
+                                                  child: Image.asset(
+                                                    "lib/assets/icons/snow.png",
+                                                    height:
+                                                        mqData!.size.height *
+                                                            0.04,
+                                                  ),
+                                                )),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 4.0),
+                                              child: Text(
+                                                "${hourData.chanceOfSnow!}%",
+                                                style: myTextStyle15(),
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  Divider(),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    const Divider(),
 
-                                  /// view more button
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Text(
-                                        "View Details",
-                                        style: myTextStyle18(),
-                                      ),
-                                      SizedBox(
-                                          height: mqData!.size.height * 0.04,
-                                          width: mqData!.size.height * 0.04,
-                                          child: MyIconButton(
-                                            buttonColor: Colors.orange,
-                                              iconColor: Colors.white,
-                                              buttonIcon:
-                                                  Icons.navigate_next_rounded,
-                                              onTap: () {}))
-                                    ],
-                                  )
-                                ],
+                                    /// view more button
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Text(
+                                          "View Details",
+                                          style: myTextStyle18(),
+                                        ),
+                                        SizedBox(
+                                            height: mqData!.size.height * 0.04,
+                                            width: mqData!.size.height * 0.04,
+                                            child: MyIconButton(
+                                                buttonColor: Colors.orange,
+                                                iconColor: Colors.white,
+                                                buttonIcon:
+                                                    Icons.navigate_next_rounded,
+                                                onTap: () {}))
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                } else {
-                  return const Center(child: Text("No Data Found"));
-                }
-              },
-            ),
-          ],
+                          );
+                        },
+                      ),
+                    );
+                  } else {
+                    return const Center(child: Text("No Data Found"));
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -507,3 +578,4 @@ class _ForecatDetailsScreenState extends State<ForecastDetailsScreen> {
 /// create custom card to display other details
 /// _________________Hourly Data______________________//
 /// hourly data is not updated according to days
+/// Complete Details screen

@@ -7,6 +7,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:weather_app/constant/utils.dart';
 import 'package:weather_app/data/api/api_helper.dart';
 import 'package:weather_app/screen/day_forecast_screen.dart';
+import 'package:weather_app/widgets/my_details_card.dart';
 import 'package:weather_app/widgets/my_icon_button.dart';
 import '../model/weather_data_model.dart';
 
@@ -21,6 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController locationController = TextEditingController();
 
   Future<weatherData>? _currentWeather;
+  // Future<weatherData>? _hourlyWeather;
   String currentLocation = "";
   PermissionStatus? locationPermission;
   bool searchShow = false;
@@ -30,7 +32,22 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _checkPermission();
     _getCurrentLocation();
+    // _hourlyWeather = ApiHelper.fetchWeatherForecast(location: currentLocation);
     setState(() {});
+  }
+
+  /// here we create function for greeting
+  String getGreeting() {
+    int hour = DateTime.now().hour;
+    if (hour >= 5 && hour < 12) {
+      return "Good Morning";
+    } else if (hour >= 12 && hour < 17) {
+      return "Good Afternoon";
+    } else if (hour >= 17 && hour < 20) {
+      return "Good Evening";
+    } else {
+      return "Good Night";
+    }
   }
 
   /// Check location permission and fetch location
@@ -140,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
             /// here we show day status current we showing Good morning
             Text(
-              "Good Morning",
+              getGreeting(),
               style: myTextStyle28(fontColor: Colors.white),
             )
           ],
@@ -255,7 +272,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Text("Error: ${snapshot.error}"),
                           );
                         } else if (snapshot.hasData) {
-                          final weatherData = snapshot.data;
+                          final currentWeatherData = snapshot.data;
+                          final currentHourlyData =
+                              snapshot.data!.forecast!.forecastday![0].hour ??
+                                  [];
                           return Column(
                             children: [
                               /// main card
@@ -284,20 +304,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
 
                                       Text(
-                                        "${weatherData!.current!.tempC}°",
+                                        "${currentWeatherData!.current!.tempC}°",
                                         style: myTextStyle72(),
                                       ),
                                       Text(
-                                        "${weatherData.current!.condition!.text}",
+                                        "${currentWeatherData.current!.condition!.text}",
                                         style: myTextStyle28(),
                                       ),
 
                                       /// updated date show
                                       Text(
                                         DateFormat("dd MMM yyyy, hh:mm a")
-                                            .format(DateTime.parse(weatherData
-                                                .current!.lastUpdated
-                                                .toString())),
+                                            .format(DateTime.parse(
+                                                currentWeatherData
+                                                    .current!.lastUpdated
+                                                    .toString())),
                                         style: myTextStyle18(),
                                       ),
                                       const SizedBox(
@@ -327,7 +348,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           controller.loading();
                                           await Future.delayed(
                                               const Duration(seconds: 1));
-                                          controller.success();
+
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(
@@ -372,7 +393,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         fit: BoxFit.cover,
                                                       ),
                                                       Text(
-                                                        "${weatherData.current!.feelslikeC}°C",
+                                                        "${currentWeatherData.current!.feelslikeC}°C",
                                                         style: myTextStyle25(),
                                                       ),
                                                       Text(
@@ -407,7 +428,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         fit: BoxFit.cover,
                                                       ),
                                                       Text(
-                                                        "${weatherData.current!.humidity}%",
+                                                        "${currentWeatherData.current!.humidity}%",
                                                         style: myTextStyle25(),
                                                       ),
                                                       Text(
@@ -442,7 +463,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         fit: BoxFit.cover,
                                                       ),
                                                       Text(
-                                                        "${weatherData.current!.windKph} kph",
+                                                        "${currentWeatherData.current!.windKph} kph",
                                                         style: myTextStyle25(),
                                                       ),
                                                       Text(
@@ -500,7 +521,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           Colors.white70),
                                                 ),
                                                 Text(
-                                                  "${weatherData.forecast!.forecastday![0].astro!.sunrise}",
+                                                  "${currentWeatherData.forecast!.forecastday![0].astro!.sunrise}",
                                                   style: myTextStyle18(
                                                       fontColor: Colors.white),
                                                 ),
@@ -526,7 +547,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           Colors.white70),
                                                 ),
                                                 Text(
-                                                  "${weatherData.forecast!.forecastday![0].astro!.sunset}",
+                                                  "${currentWeatherData.forecast!.forecastday![0].astro!.sunset}",
                                                   style: myTextStyle18(
                                                       fontColor: Colors.white),
                                                 ),
@@ -578,7 +599,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           Colors.white70),
                                                 ),
                                                 Text(
-                                                  "${weatherData.forecast!.forecastday![0].astro!.moonrise}",
+                                                  "${currentWeatherData.forecast!.forecastday![0].astro!.moonrise}",
                                                   style: myTextStyle18(
                                                       fontColor: Colors.white),
                                                 ),
@@ -604,7 +625,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           Colors.white70),
                                                 ),
                                                 Text(
-                                                  "${weatherData.forecast!.forecastday![0].astro!.moonset}",
+                                                  "${currentWeatherData.forecast!.forecastday![0].astro!.moonset}",
                                                   style: myTextStyle18(
                                                       fontColor: Colors.white),
                                                 ),
@@ -615,6 +636,55 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ],
                                     ),
                                   ),
+                                ),
+                              ),
+
+                              /// other details part 3
+                              /// here we call my details card
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8.0, vertical: 12),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    MyDetailsCard(
+                                        imagePath: "lib/assets/icons/uv.png",
+                                        value: currentWeatherData.current!.uv
+                                            .toString(),
+                                        title: "UV Index",
+                                        cardColor: Colors.blue.shade100),
+                                    MyDetailsCard(
+                                      imagePath:
+                                          "lib/assets/icons/hurricane.png",
+                                      value:
+                                          "${currentWeatherData.current!.gustKph}Kph",
+                                      title: "Gust",
+                                      cardColor: Colors.orange.shade100,
+                                    ),
+                                    MyDetailsCard(
+                                      imagePath:
+                                          "lib/assets/icons/windchill.png",
+                                      value:
+                                          "${currentWeatherData.current!.windchillC}°",
+                                      title: "Windchill",
+                                      cardColor: Colors.blue.shade100,
+                                    ),
+                                    MyDetailsCard(
+                                      imagePath: "lib/assets/icons/windDir.png",
+                                      value:
+                                          "${currentWeatherData.current!.windDir}",
+                                      title: "Direction",
+                                      cardColor: Colors.orange.shade100,
+                                    ),
+                                    MyDetailsCard(
+                                      imagePath: "lib/assets/icons/water.png",
+                                      value:
+                                          "${currentWeatherData.current!.dewpointC}°",
+                                      title: "Dew point",
+                                      cardColor: Colors.blue.shade100,
+                                    ),
+                                  ],
                                 ),
                               ),
 
@@ -646,7 +716,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 height: 80,
                                               ),
                                               Text(
-                                                "${weatherData.current!.pressureMb}Mb",
+                                                "${currentWeatherData.current!.pressureMb}Mb",
                                                 style: myTextStyle22(
                                                     fontColor: Colors.white,
                                                     fontWeight:
@@ -671,8 +741,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           decoration: const BoxDecoration(
                                               gradient: LinearGradient(
                                                 colors: [
-                                                  Colors.greenAccent,
-                                                  Colors.blueAccent
+                                                  Colors.white24,
+                                                  Colors.black54
                                                 ],
                                               ),
                                               borderRadius: BorderRadius.only(
@@ -693,10 +763,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       MainAxisAlignment.center,
                                                   children: [
                                                     Text(
-                                                      "${weatherData.current!.visKm} Km",
+                                                      "${currentWeatherData.current!.visKm} Km",
                                                       style: myTextStyle28(
                                                           fontColor:
-                                                              Colors.black,
+                                                              Colors.white,
                                                           fontWeight:
                                                               FontWeight.w900),
                                                     ),
@@ -704,7 +774,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       "Visibility",
                                                       style: myTextStyle22(
                                                           fontColor:
-                                                              Colors.black87),
+                                                              Colors.white60),
                                                     )
                                                   ],
                                                 ),
@@ -735,8 +805,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           decoration: const BoxDecoration(
                                               gradient: LinearGradient(
                                                 colors: [
-                                                  Colors.greenAccent,
-                                                  Colors.blueAccent
+                                                  Colors.white24,
+                                                  Colors.black54
                                                 ],
                                               ),
                                               borderRadius: BorderRadius.only(
@@ -757,10 +827,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       MainAxisAlignment.center,
                                                   children: [
                                                     Text(
-                                                      "${weatherData.current!.cloud} %",
+                                                      "${currentWeatherData.current!.cloud} %",
                                                       style: myTextStyle28(
                                                           fontColor:
-                                                              Colors.black,
+                                                              Colors.white,
                                                           fontWeight:
                                                               FontWeight.w900),
                                                     ),
@@ -768,7 +838,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       "Cloud Cover",
                                                       style: myTextStyle22(
                                                           fontColor:
-                                                              Colors.black87),
+                                                              Colors.white60),
                                                     )
                                                   ],
                                                 ),
@@ -806,7 +876,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 height: 80,
                                               ),
                                               Text(
-                                                "${weatherData.current!.heatindexC}° C",
+                                                "${currentWeatherData.current!.heatindexC}°C",
                                                 style: myTextStyle22(
                                                     fontColor: Colors.white,
                                                     fontWeight:
@@ -816,19 +886,272 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 "Heat index",
                                                 style: myTextStyle18(
                                                     fontColor: Colors.white70),
-                                              )
+                                              ),
                                             ],
                                           ),
                                         ),
                                       ),
-
-                                      /// other details part 3
                                     ],
                                   ),
                                 ),
                               ),
+                              const SizedBox(
+                                height: 10,
+                              ),
 
                               /// here we show forecast data
+                              /// ____________ Hourly foreCast_____________///
+                              Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 12.0),
+                                      child: Text(
+                                        "Hourly Forecast",
+                                        style: myTextStyle22(),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: mqData!.size.height * 0.18,
+                                      child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: currentHourlyData.length,
+                                          itemBuilder: (contex, index) {
+                                            final hourData =
+                                                currentHourlyData[index];
+                                            DateTime time =
+                                                DateTime.parse(hourData.time!);
+                                            String formatTime =
+                                                DateFormat("hh:mm a")
+                                                    .format(time);
+                                            return Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    gradient: RadialGradient(
+                                                      colors: [
+                                                        Colors.white,
+                                                        Colors.blue.shade100
+                                                      ],
+                                                      tileMode:
+                                                          TileMode.repeated,
+                                                    ),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            30)),
+                                                child: Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(vertical: 8.0),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        formatTime,
+                                                        style: myTextStyle12(
+                                                            fontColor:
+                                                                Colors.black),
+                                                      ),
+                                                      Image.network(
+                                                          "https:${hourData.condition!.icon}"),
+                                                      Text(
+                                                        "${hourData.tempC.toString().split(".").take(1).join()}°",
+                                                        style: myTextStyle22(
+                                                            fontColor:
+                                                                Colors.black),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          }),
+                                    ),
+                                    const Divider(),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0),
+                                      child: Center(
+                                        child: ActionSlider.standard(
+                                          width: mqData!.size!.width * 0.9,
+                                          height: mqData!.size.height * 0.06,
+                                          rolling: true,
+                                          icon: const Icon(
+                                            Icons.navigate_next_rounded,
+                                            size: 40,
+                                            color: Colors.white70,
+                                          ),
+                                          toggleColor: Colors.orange.shade800,
+                                          backgroundColor:
+                                              Colors.orange.shade300,
+                                          successIcon:
+                                              const Icon(Icons.verified_user),
+                                          child: Text(
+                                            "Slide to More Detail\'s",
+                                            style: myTextStyle18(),
+                                          ),
+                                          action: (controller) async {
+                                            controller.loading();
+                                            await Future.delayed(
+                                                const Duration(seconds: 1));
+
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        DayForecastScreen(
+                                                          location:
+                                                              currentLocation,
+                                                        )));
+                                            setState(() {
+                                              /// only this line add
+                                              controller.reset();
+
+                                              /// add
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              const SizedBox(height: 16,),
+
+
+
+                              /// here we show days forecast data
+                              /// ____________ Hourly foreCast_____________///
+                              Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 12.0),
+                                      child: Text(
+                                        "15 day\'s Forecast",
+                                        style: myTextStyle22(),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: mqData!.size.height * 0.18,
+                                      child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: currentHourlyData.length,
+                                          itemBuilder: (contex, index) {
+                                            final hourData =
+                                            currentHourlyData[index];
+                                            DateTime time =
+                                            DateTime.parse(hourData.time!);
+                                            String formatTime =
+                                            DateFormat("hh:mm a")
+                                                .format(time);
+                                            return Padding(
+                                              padding:
+                                              const EdgeInsets.all(8.0),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    gradient: RadialGradient(
+                                                      colors: [
+                                                        Colors.white,
+                                                        Colors.blue.shade100
+                                                      ],
+                                                      tileMode:
+                                                      TileMode.repeated,
+                                                    ),
+                                                    borderRadius:
+                                                    BorderRadius.circular(
+                                                        30)),
+                                                child: Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(vertical: 8.0),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .center,
+                                                    children: [
+                                                      Text(
+                                                        formatTime,
+                                                        style: myTextStyle12(
+                                                            fontColor:
+                                                            Colors.black),
+                                                      ),
+                                                      Image.network(
+                                                          "https:${hourData.condition!.icon}"),
+                                                      Text(
+                                                        "${hourData.tempC.toString().split(".").take(1).join()}°",
+                                                        style: myTextStyle22(
+                                                            fontColor:
+                                                            Colors.black),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          }),
+                                    ),
+                                    const Divider(),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0),
+                                      child: Center(
+                                        child: ActionSlider.standard(
+                                          width: mqData!.size!.width * 0.9,
+                                          height: mqData!.size.height * 0.06,
+                                          rolling: true,
+                                          icon: const Icon(
+                                            Icons.navigate_next_rounded,
+                                            size: 40,
+                                            color: Colors.white70,
+                                          ),
+                                          toggleColor: Colors.orange.shade800,
+                                          backgroundColor:
+                                          Colors.orange.shade300,
+                                          successIcon:
+                                          const Icon(Icons.verified_user),
+                                          child: Text(
+                                            "Slide to More Detail\'s",
+                                            style: myTextStyle18(),
+                                          ),
+                                          action: (controller) async {
+                                            controller.loading();
+                                            await Future.delayed(
+                                                const Duration(seconds: 1));
+
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        DayForecastScreen(
+                                                          location:
+                                                          currentLocation,
+                                                        )));
+                                            setState(() {
+                                              /// only this line add
+                                              controller.reset();
+
+                                              /// add
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
                             ],
                           );
                         } else {
@@ -873,4 +1196,17 @@ class _HomeScreenState extends State<HomeScreen> {
 /// Solve some basic problem => DONE
 ///
 /// Step 8
-/// Forecast Details Screen
+/// Forecast Details Screen => DONE
+///
+/// Step 9
+/// According to time we show greeting => DONE
+///
+/// Step 10
+/// add more data in home screen => DONE
+///
+/// Step 11
+/// Show Hourly forecast in home screen => DONE
+///
+/// Steps 12
+/// show Days Forecast in home screen
+///

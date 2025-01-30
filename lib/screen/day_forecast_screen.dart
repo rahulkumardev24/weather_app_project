@@ -10,8 +10,6 @@ import 'package:weather_app/model/weather_data_model.dart';
 class DayForecastScreen extends StatefulWidget {
   final String location;
 
-
-
   const DayForecastScreen({super.key, required this.location ,
 
   });
@@ -82,6 +80,9 @@ class _DayForecastScreenState extends State<DayForecastScreen> {
             buttonColor: Colors.blue.shade200,
             onTap: () {
               Navigator.pop(context);
+              setState(() {
+
+              });
             },
           ),
         ),
@@ -433,12 +434,12 @@ class _DayForecastScreenState extends State<DayForecastScreen> {
                                       controller.loading();
                                       await Future.delayed(
                                           const Duration(seconds: 1));
-                                      controller.success();
+
 
                                       /// After Navigation Show Forecast Details Screen
                                       /// here we send data to details screen
 
-                                      Navigator.push(
+                                      Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>

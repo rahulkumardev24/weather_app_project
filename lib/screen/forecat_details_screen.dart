@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:weather_app/constant/utils.dart';
 import 'package:weather_app/data/api/api_helper.dart';
 import 'package:weather_app/model/weather_data_model.dart';
+import 'package:weather_app/screen/day_forecast_screen.dart';
 import 'package:weather_app/widgets/my_details_card.dart';
 import 'package:weather_app/widgets/my_icon_button.dart';
 
@@ -94,7 +95,7 @@ class _ForecatDetailsScreenState extends State<ForecastDetailsScreen> {
               buttonIcon: Icons.backspace_outlined,
               buttonColor: Colors.orange.shade200,
               onTap: () {
-                Navigator.pop(context);
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> DayForecastScreen(location: widget.location)));
               }),
         ),
         actions: [
@@ -579,3 +580,5 @@ class _ForecatDetailsScreenState extends State<ForecastDetailsScreen> {
 /// _________________Hourly Data______________________//
 /// hourly data is not updated according to days
 /// Complete Details screen
+/// solve this Navigation problem
+/// Solve

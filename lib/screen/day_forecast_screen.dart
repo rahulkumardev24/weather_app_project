@@ -455,9 +455,7 @@ class _DayForecastScreenState extends State<DayForecastScreen> {
                                                     moonSetTime: day.astro!.moonset,
                                                     sunSetTime: day.astro!.sunset,
                                                     sunRiseTime: day.astro!.sunrise,
-
-
-
+                                                    index: index,
                                                   )));
 
                                       setState(() {

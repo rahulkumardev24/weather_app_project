@@ -327,7 +327,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                         Text(
                                           "${currentWeatherData.current!.condition!.text}",
-                                          style: myTextStyle28(),
+                                          style: myTextStyle25(),
                                         ),
 
                                         /// updated date show

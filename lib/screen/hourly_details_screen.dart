@@ -349,25 +349,29 @@ class _HourlyDetailsScreenState extends State<HourlyDetailsScreen> {
                                       "Feel like : ${widget.feelLike}°",
                                       style: myTextStyle18(),
                                     ),
-                                    Container(
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                width: 2, color: Colors.orange),
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        child: Center(
-                                            child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0, vertical: 1),
-                                          child: Text(
-                                            "${widget.condition}",
-                                            style: myTextStyle22(),
-                                          ),
-                                        )))
+
                                   ],
                                 )
                               ],
                             ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 2, color: Colors.orange),
+                                    borderRadius:
+                                    BorderRadius.circular(10)),
+                                child: Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0, vertical: 1),
+                                      child: Text(
+                                        "${widget.condition}",
+                                        style: myTextStyle18(),
+                                      ),
+                                    ))),
                           ),
                           const SizedBox(
                             height: 16,

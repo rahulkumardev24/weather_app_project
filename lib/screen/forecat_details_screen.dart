@@ -356,7 +356,7 @@ class _ForecatDetailsScreenState extends State<ForecastDetailsScreen> {
                           String formattedTime =
                               DateFormat("hh:mm a").format(time);
                           return SizedBox(
-                            width: mqData!.size.width * 0.5,
+                            width: mqData!.size.width * 0.6,
                             child: Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 4.0),
@@ -387,7 +387,7 @@ class _ForecatDetailsScreenState extends State<ForecastDetailsScreen> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Padding(
-                                          padding: EdgeInsets.only(left: 4.0),
+                                          padding: const EdgeInsets.only(left: 4.0),
                                           child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
@@ -403,8 +403,8 @@ class _ForecatDetailsScreenState extends State<ForecastDetailsScreen> {
                                                 style: myTextStyle15(),
                                               ),
                                               Text(
-                                                "${hourData.condition!.text}",
-                                                style: myTextStyle18(),
+                                                hourData.condition!.text.toString().split(" ").take(2).join(" "),
+                                                style: myTextStyle15(),
                                               )
                                             ],
                                           ),

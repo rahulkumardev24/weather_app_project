@@ -23,7 +23,6 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController locationController = TextEditingController();
 
   Future<weatherData>? _currentWeather;
-  // Future<weatherData>? _hourlyWeather;
   String currentLocation = "";
   PermissionStatus? locationPermission;
   bool searchShow = false;
@@ -33,7 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _checkPermission();
     _getCurrentLocation();
-    // _hourlyWeather = ApiHelper.fetchWeatherForecast(location: currentLocation);
     setState(() {});
   }
 
@@ -214,8 +212,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [Colors.orange.shade100 , Colors.blue.shade100])
-        ),
+            gradient: LinearGradient(
+                colors: [Colors.orange.shade100, Colors.blue.shade100])),
         child: Center(
           child: SingleChildScrollView(
             child: Column(
@@ -245,7 +243,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           bottomLeft: Radius.circular(16),
                                           bottomRight: Radius.circular(8))),
                                   child: IconButton(
-        
+
                                       /// in this search icon button search operation perform
                                       onPressed: () {
                                         _search();
@@ -286,12 +284,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           } else if (snapshot.hasData) {
                             /// current weather
                             final currentWeatherData = snapshot.data;
-        
+
                             /// hourly forecast
                             final currentHourlyData =
                                 snapshot.data!.forecast!.forecastday![0].hour ??
                                     [];
-        
+
                             /// days foreCast
                             List<Forecastday> daysForecastData =
                                 snapshot.data!.forecast!.forecastday!;
@@ -321,7 +319,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           height: mqData!.size.height * 0.4,
                                           fit: BoxFit.cover,
                                         ),
-        
+
                                         Text(
                                           "${currentWeatherData!.current!.tempC}°",
                                           style: myTextStyle72(),
@@ -330,7 +328,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           "${currentWeatherData.current!.condition!.text}",
                                           style: myTextStyle28(),
                                         ),
-        
+
                                         /// updated date show
                                         Text(
                                           DateFormat("dd MMM yyyy, hh:mm a")
@@ -343,7 +341,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         const SizedBox(
                                           height: 6,
                                         ),
-        
+
                                         /// ______________________Action Slider___________________________///
                                         ///
                                         ActionSlider.standard(
@@ -367,7 +365,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             controller.loading();
                                             await Future.delayed(
                                                 const Duration(seconds: 1));
-        
+
                                             Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
@@ -379,7 +377,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             setState(() {
                                               /// only this line add
                                               controller.reset();
-        
+
                                               /// add
                                             });
                                           },
@@ -387,7 +385,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         const SizedBox(
                                           height: 6,
                                         ),
-        
+
                                         Padding(
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 8.0, horizontal: 8),
@@ -403,7 +401,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               16)),
                                                   child: Padding(
                                                     padding:
-                                                        const EdgeInsets.all(4.0),
+                                                        const EdgeInsets.all(
+                                                            4.0),
                                                     child: Column(
                                                       children: [
                                                         Image.asset(
@@ -413,11 +412,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         ),
                                                         Text(
                                                           "${currentWeatherData.current!.feelslikeC}°C",
-                                                          style: myTextStyle25(),
+                                                          style:
+                                                              myTextStyle25(),
                                                         ),
                                                         Text(
                                                           "Feel Like",
-                                                          style: myTextStyle18(),
+                                                          style:
+                                                              myTextStyle18(),
                                                         )
                                                       ],
                                                     ),
@@ -427,7 +428,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               const SizedBox(
                                                 width: 6,
                                               ),
-        
+
                                               /// Humidity
                                               Expanded(
                                                 child: Container(
@@ -438,7 +439,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               16)),
                                                   child: Padding(
                                                     padding:
-                                                        const EdgeInsets.all(4.0),
+                                                        const EdgeInsets.all(
+                                                            4.0),
                                                     child: Column(
                                                       children: [
                                                         Image.asset(
@@ -448,11 +450,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         ),
                                                         Text(
                                                           "${currentWeatherData.current!.humidity}%",
-                                                          style: myTextStyle25(),
+                                                          style:
+                                                              myTextStyle25(),
                                                         ),
                                                         Text(
                                                           "Humidity",
-                                                          style: myTextStyle18(),
+                                                          style:
+                                                              myTextStyle18(),
                                                         )
                                                       ],
                                                     ),
@@ -462,7 +466,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               const SizedBox(
                                                 width: 6,
                                               ),
-        
+
                                               /// Wind
                                               Expanded(
                                                 child: Container(
@@ -473,7 +477,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               16)),
                                                   child: Padding(
                                                     padding:
-                                                        const EdgeInsets.all(4.0),
+                                                        const EdgeInsets.all(
+                                                            4.0),
                                                     child: Column(
                                                       children: [
                                                         Image.asset(
@@ -483,11 +488,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         ),
                                                         Text(
                                                           "${currentWeatherData.current!.windKph} kph",
-                                                          style: myTextStyle25(),
+                                                          style:
+                                                              myTextStyle25(),
                                                         ),
                                                         Text(
                                                           "Wind",
-                                                          style: myTextStyle18(),
+                                                          style:
+                                                              myTextStyle18(),
                                                         )
                                                       ],
                                                     ),
@@ -504,7 +511,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 const SizedBox(
                                   height: 8,
                                 ),
-        
+
                                 /// _________________SUN_________________///
                                 /// here we show sunset and sunrise status
                                 Padding(
@@ -542,7 +549,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   Text(
                                                     "${currentWeatherData.forecast!.forecastday![0].astro!.sunrise}",
                                                     style: myTextStyle18(
-                                                        fontColor: Colors.white),
+                                                        fontColor:
+                                                            Colors.white),
                                                   ),
                                                 ],
                                               ),
@@ -568,7 +576,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   Text(
                                                     "${currentWeatherData.forecast!.forecastday![0].astro!.sunset}",
                                                     style: myTextStyle18(
-                                                        fontColor: Colors.white),
+                                                        fontColor:
+                                                            Colors.white),
                                                   ),
                                                 ],
                                               ),
@@ -582,7 +591,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 const SizedBox(
                                   height: 8,
                                 ),
-        
+
                                 ///_________________MOON_________________///
                                 ///here we show moonSet and moonRise
                                 Padding(
@@ -620,7 +629,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   Text(
                                                     "${currentWeatherData.forecast!.forecastday![0].astro!.moonrise}",
                                                     style: myTextStyle18(
-                                                        fontColor: Colors.white),
+                                                        fontColor:
+                                                            Colors.white),
                                                   ),
                                                 ],
                                               ),
@@ -646,7 +656,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   Text(
                                                     "${currentWeatherData.forecast!.forecastday![0].astro!.moonset}",
                                                     style: myTextStyle18(
-                                                        fontColor: Colors.white),
+                                                        fontColor:
+                                                            Colors.white),
                                                   ),
                                                 ],
                                               ),
@@ -657,7 +668,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                 ),
-        
+
                                 /// other details part 3
                                 /// here we call my details card
                                 Padding(
@@ -690,7 +701,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         cardColor: Colors.blue.shade200,
                                       ),
                                       MyDetailsCard(
-                                        imagePath: "lib/assets/icons/windDir.png",
+                                        imagePath:
+                                            "lib/assets/icons/windDir.png",
                                         value:
                                             "${currentWeatherData.current!.windDir}",
                                         title: "Direction",
@@ -706,7 +718,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ],
                                   ),
                                 ),
-        
+
                                 /// other details show
                                 Padding(
                                   padding: const EdgeInsets.all(10.0),
@@ -718,7 +730,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Container(
                                           decoration: BoxDecoration(
                                               border: Border.all(
-                                                  width: 3, color: Colors.white),
+                                                  width: 3,
+                                                  color: Colors.white),
                                               borderRadius:
                                                   const BorderRadius.only(
                                                       bottomRight:
@@ -744,7 +757,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 Text(
                                                   "Pressure",
                                                   style: myTextStyle18(
-                                                      fontColor: Colors.black54),
+                                                      fontColor:
+                                                          Colors.black54),
                                                 )
                                               ],
                                             ),
@@ -753,7 +767,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         const SizedBox(
                                           width: 12,
                                         ),
-        
+
                                         /// Visibility
                                         Expanded(
                                           child: Container(
@@ -770,8 +784,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     topLeft:
                                                         Radius.circular(22))),
                                             child: Padding(
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 8.0, vertical: 4),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8.0,
+                                                      vertical: 4),
                                               child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
@@ -779,7 +795,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 children: [
                                                   Column(
                                                     mainAxisAlignment:
-                                                        MainAxisAlignment.center,
+                                                        MainAxisAlignment
+                                                            .center,
                                                     children: [
                                                       Text(
                                                         "${currentWeatherData.current!.visKm} Km",
@@ -787,7 +804,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             fontColor:
                                                                 Colors.white,
                                                             fontWeight:
-                                                                FontWeight.w900),
+                                                                FontWeight
+                                                                    .w900),
                                                       ),
                                                       Text(
                                                         "Visibility",
@@ -810,7 +828,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                 ),
-        
+
                                 /// other details part 2
                                 Padding(
                                   padding: const EdgeInsets.all(10.0),
@@ -834,8 +852,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     topLeft:
                                                         Radius.circular(22))),
                                             child: Padding(
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 8.0, vertical: 4),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8.0,
+                                                      vertical: 4),
                                               child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
@@ -843,7 +863,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 children: [
                                                   Column(
                                                     mainAxisAlignment:
-                                                        MainAxisAlignment.center,
+                                                        MainAxisAlignment
+                                                            .center,
                                                     children: [
                                                       Text(
                                                         "${currentWeatherData.current!.cloud} %",
@@ -851,7 +872,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             fontColor:
                                                                 Colors.white,
                                                             fontWeight:
-                                                                FontWeight.w900),
+                                                                FontWeight
+                                                                    .w900),
                                                       ),
                                                       Text(
                                                         "Cloud Cover",
@@ -873,12 +895,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                         const SizedBox(
                                           width: 12,
                                         ),
-        
+
                                         /// Heat index
                                         Container(
                                           decoration: BoxDecoration(
                                               border: Border.all(
-                                                  width: 3, color: Colors.white),
+                                                  width: 3,
+                                                  color: Colors.white),
                                               borderRadius:
                                                   const BorderRadius.only(
                                                       bottomRight:
@@ -904,7 +927,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 Text(
                                                   "Heat index",
                                                   style: myTextStyle18(
-                                                      fontColor: Colors.black54),
+                                                      fontColor:
+                                                          Colors.black54),
                                                 ),
                                               ],
                                             ),
@@ -917,15 +941,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                 const SizedBox(
                                   height: 10,
                                 ),
-        
+
                                 /// here we show forecast data
                                 /// ____________ Hourly foreCast_____________///
                                 Container(
                                   decoration: const BoxDecoration(
-                                      color: Colors.white60,
-                                      ),
+                                    color: Colors.white60,
+                                  ),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
@@ -943,8 +968,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             itemBuilder: (contex, index) {
                                               final hourData =
                                                   currentHourlyData[index];
-                                              DateTime time =
-                                                  DateTime.parse(hourData.time!);
+                                              DateTime time = DateTime.parse(
+                                                  hourData.time!);
                                               String formatTime =
                                                   DateFormat("hh:mm a")
                                                       .format(time);
@@ -966,7 +991,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               30)),
                                                   child: Padding(
                                                     padding: const EdgeInsets
-                                                        .symmetric(vertical: 8.0),
+                                                        .symmetric(
+                                                        vertical: 8.0),
                                                     child: Column(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
@@ -1020,7 +1046,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               controller.loading();
                                               await Future.delayed(
                                                   const Duration(seconds: 1));
-        
+
                                               /// when slide the hourly slider
                                               /// navigate to forecast details screen
                                               Navigator.push(
@@ -1112,7 +1138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               setState(() {
                                                 /// only this line add
                                                 controller.reset();
-        
+
                                                 /// add
                                               });
                                             },
@@ -1122,20 +1148,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ],
                                   ),
                                 ),
-        
+
                                 const SizedBox(
                                   height: 21,
                                 ),
-        
+
                                 /// here we show days forecast data
                                 /// ____________ Days foreCast_____________///
                                 /// _____________ 15 Day's forecast
                                 Container(
                                   decoration: const BoxDecoration(
-                                      color: Colors.white60,
-                                     ),
+                                    color: Colors.white60,
+                                  ),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
@@ -1162,7 +1189,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   .add(const Duration(days: 1));
                                               String formattedDate;
                                               if (parsedDate.year == now.year &&
-                                                  parsedDate.month == now.month &&
+                                                  parsedDate.month ==
+                                                      now.month &&
                                                   parsedDate.day == now.day) {
                                                 formattedDate = "Today";
                                               } else if (parsedDate.year ==
@@ -1177,7 +1205,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     DateFormat("d MMM")
                                                         .format(parsedDate);
                                               }
-        
+
                                               return Padding(
                                                 padding:
                                                     const EdgeInsets.all(8.0),
@@ -1196,7 +1224,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               30)),
                                                   child: Padding(
                                                     padding: const EdgeInsets
-                                                        .symmetric(vertical: 8.0),
+                                                        .symmetric(
+                                                        vertical: 8.0),
                                                     child: Column(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
@@ -1238,7 +1267,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                               color: Colors.white70,
                                             ),
                                             toggleColor: Colors.blue.shade800,
-                                            backgroundColor: Colors.blue.shade300,
+                                            backgroundColor:
+                                                Colors.blue.shade300,
                                             successIcon:
                                                 const Icon(Icons.verified_user),
                                             child: Text(
@@ -1249,7 +1279,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               controller.loading();
                                               await Future.delayed(
                                                   const Duration(seconds: 1));
-        
+
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
@@ -1261,25 +1291,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                               setState(() {
                                                 /// only this line add
                                                 controller.reset();
-        
+
                                                 /// add
                                               });
                                             },
                                           ),
                                         ),
                                       ),
-
                                     ],
                                   ),
                                 )
                               ],
                             );
                           } else {
-                            return const Center(child: Text("No data available"));
+                            return const Center(
+                                child: Text("No data available"));
                           }
                         },
                       ),
-                const SizedBox(height: 12,),
+                const SizedBox(
+                  height: 12,
+                ),
               ],
             ),
           ),
@@ -1305,7 +1337,6 @@ class _HomeScreenState extends State<HomeScreen> {
 /// FLOW THE STEPS FOR SHOW FORECAST DATA
 /// FIRE GET JSON FILE
 /// THEN CONVERT JSON TO MODEL THEN CREATE FUNCTION IN API API HELPER CALL
-///
 /// Step 5 => DONE
 /// show next day information
 /// create screen all date temperature
@@ -1337,6 +1368,18 @@ class _HomeScreenState extends State<HomeScreen> {
 ///
 /// Step 14
 /// Alert message Screen and Show Alert Message => DONE
+///
+/// Step 15
+/// Create Hourly Forecast details Screen
+///
+///
+///
+///
+///
+///
+///
+///
+///
 ///
 ///
 ///

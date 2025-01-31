@@ -5,6 +5,7 @@ import 'package:weather_app/data/api/api_helper.dart';
 import 'package:weather_app/model/weather_data_model.dart';
 import 'package:weather_app/screen/alert_message_screen.dart';
 import 'package:weather_app/screen/day_forecast_screen.dart';
+import 'package:weather_app/screen/hourly_details_screen.dart';
 import 'package:weather_app/widgets/my_details_card.dart';
 import 'package:weather_app/widgets/my_icon_button.dart';
 
@@ -566,7 +567,49 @@ class _ForecatDetailsScreenState extends State<ForecastDetailsScreen> {
                                                 iconColor: Colors.white,
                                                 buttonIcon:
                                                     Icons.navigate_next_rounded,
-                                                onTap: () {}))
+                                                onTap: () {
+                                                  /// Navigate to Hourly details screen
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) => HourlyDetailsScreen(
+                                                              temp: hourData
+                                                                  .tempC,
+                                                              snowChance: hourData
+                                                                  .chanceOfSnow,
+                                                              snowCm: hourData
+                                                                  .snowCm,
+                                                              cloud: hourData
+                                                                  .cloud,
+                                                              windChill: hourData
+                                                                  .windchillC,
+                                                              feelLike: hourData
+                                                                  .feelslikeC,
+                                                              heatIndex: hourData
+                                                                  .heatindexC,
+                                                              visual: hourData
+                                                                  .visKm,
+                                                              uv: hourData.uv,
+                                                              condition: hourData
+                                                                  .condition!
+                                                                  .text,
+                                                              icon: hourData
+                                                                  .condition!
+                                                                  .icon,
+                                                              wind: hourData
+                                                                  .windKph,
+                                                              windDegree: hourData
+                                                                  .windDegree,
+                                                              rainChance: hourData
+                                                                  .chanceOfRain,
+                                                              humidity: hourData
+                                                                  .humidity,
+                                                            time: formattedTime,
+                                                            location: widget.location ,
+                                                            date: widget.date,
+
+                                                          )));
+                                                }))
                                       ],
                                     )
                                   ],

@@ -52,7 +52,7 @@ class _AlertMessageScreenState extends State<AlertMessageScreen> {
                   width: 4,
                 ),
                 Text(
-                  'location',
+                  widget.location,
                   style: myTextStyle18(),
                 ),
               ],

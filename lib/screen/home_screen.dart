@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:weather_app/constant/utils.dart';
 import 'package:weather_app/data/api/api_helper.dart';
+import 'package:weather_app/screen/alert_message_screen.dart';
 import 'package:weather_app/screen/day_forecast_screen.dart';
 import 'package:weather_app/screen/forecat_details_screen.dart';
 import 'package:weather_app/widgets/my_details_card.dart';
@@ -1312,6 +1313,42 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(
                   height: 12,
                 ),
+                SizedBox(
+                  width: mqData!.size.width * 0.9,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AlertMessageScreen(
+                                    location: currentLocation)));
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red.shade100,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6),
+                              side: const BorderSide(
+                                  width: 2, color: Colors.red))),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "lib/assets/images/warning.png",
+                            height: mqData!.size.height * 0.05,
+                          ),
+                          const SizedBox(
+                            width: 6,
+                          ),
+                          Text(
+                            "Alert",
+                            style: myTextStyle25(fontFamily: "secondary"),
+                          )
+                        ],
+                      )),
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
               ],
             ),
           ),
@@ -1370,7 +1407,24 @@ class _HomeScreenState extends State<HomeScreen> {
 /// Alert message Screen and Show Alert Message => DONE
 ///
 /// Step 15
-/// Create Hourly Forecast details Screen
+/// Create Hourly Forecast details Screen => DONE
+///
+/// Step 16
+/// Add Alert button in home screen => DONE
+///
+/// Step 17
+/// Create Splash screen => DONE
+///
+/// Step 18
+/// App Icon Change => Done
+///
+/// Step 19
+/// Final Test
+///
+/// Thanks For Watching
+///
+///
+///
 ///
 ///
 ///

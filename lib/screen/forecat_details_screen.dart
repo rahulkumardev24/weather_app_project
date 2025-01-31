@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:weather_app/constant/utils.dart';
 import 'package:weather_app/data/api/api_helper.dart';
 import 'package:weather_app/model/weather_data_model.dart';
+import 'package:weather_app/screen/alert_message_screen.dart';
 import 'package:weather_app/screen/day_forecast_screen.dart';
 import 'package:weather_app/widgets/my_details_card.dart';
 import 'package:weather_app/widgets/my_icon_button.dart';
@@ -44,7 +45,7 @@ class ForecastDetailsScreen extends StatefulWidget {
       required this.moonSetTime,
       required this.sunRiseTime,
       required this.sunSetTime,
-       required this.index,
+      required this.index,
       required this.rainChance,
       required this.snowChance,
       required this.totalSnow,
@@ -157,7 +158,17 @@ class _ForecatDetailsScreenState extends State<ForecastDetailsScreen> {
                               style: myTextStyle36(),
                             ),
                             ElevatedButton(
-                                onPressed: () {},
+
+                                /// when click to Alert Message button Navigate to Alert Message Screen
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              AlertMessageScreen(
+                                                location: widget.location,
+                                              )));
+                                },
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.white,
                                     side: const BorderSide(

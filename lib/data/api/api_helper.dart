@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:weather_app/data/api/urls.dart';
 
+import '../../model/alert_data_model.dart';
 import '../../model/weather_data_model.dart';
 
 class ApiHelper {
@@ -30,7 +31,7 @@ class ApiHelper {
     String? latitude,
     String? longitude,
   }) async {
-       String url;
+    String url;
     if (latitude != null && longitude != null) {
       url = Urls.getForecastByLatLong(latitude, longitude);
     } else if (location != null) {
@@ -43,8 +44,18 @@ class ApiHelper {
     return weatherData.fromJson(response);
   }
 
-
   /// here we create for others
+  /// create method for fetch Alert Message
+  static Future<AlertMessageData> fetchAlertMessage({
+    String? location,
+  }) async {
+    String? url;
+    if (location != null) {
+      url = Urls.getWeatherAlert(location);
+    }
+    final response = await getAPI(url!);
+    return AlertMessageData.fromJson(response);
+  }
 }
 
 /// now we update api method
